@@ -177,12 +177,13 @@ const generateCategoricalChart = ({
       const { data, children, width, height, layout, stackOffset, margin } = this.props;
       const { updateId } = this.state;
 
-      if (nextProps.data !== data || nextProps.width !== width ||
+      if (JSON.stringify(nextProps.data) !== JSON.stringify(data) || nextProps.width !== width ||
         nextProps.height !== height || nextProps.layout !== layout ||
         nextProps.stackOffset !== stackOffset || !shallowEqual(nextProps.margin, margin)) {
-        this.setState({ ...this.state, updateId: updateId + 1,
+        const defaultState = this.constructor.createDefaultState(nextProps);
+        this.setState({ ...defaultState, updateId: updateId + 1,
           ...this.updateStateOfAxisMapsOffsetAndStackGroups(
-            { props: nextProps, ...this.state, updateId: updateId + 1 }) }
+            { props: nextProps, ...defaultState, updateId: updateId + 1 }) }
         );
       } else if (!isChildrenEqual(nextProps.children, children)) {
         // update configuration in chilren
